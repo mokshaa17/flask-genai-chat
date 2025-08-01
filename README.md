@@ -8,7 +8,7 @@ A lightweight AI chatbot interface built using Flask and OpenRouter API.
 - Built with Flask and vanilla HTML/CSS
 ## 📸 Screenshot
 
-![App Screenshot](screenshot.png)
+![App Screenshot](Screenshot.png)
 
 ## 📦 Setup
 
