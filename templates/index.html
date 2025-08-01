@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🧠 GenAI Chat</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <h1>🧠 GenAI Chat</h1>
+  <div class="chat-container">
+    <div class="chat-history" id="chat-history"></div>
+    <form id="chat-form">
+      <input type="text" id="user-input" placeholder="Type your message..." required />
+      <button type="submit">Send</button>
+    </form>
+  </div>
+
+  <script>
+    const chatHistory = document.getElementById("chat-history");
+    const chatForm = document.getElementById("chat-form");
+    const userInput = document.getElementById("user-input");
+
+    async function sendMessageToAPI(message) {
+      const res = await fetch("/chat", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ message })
+      });
+      const data = await res.json();
+      return data.reply;
+    }
+
+    function addMessage(content, sender) {
+      const msgDiv = document.createElement("div");
+      msgDiv.classList.add("chat-msg", sender);
+      msgDiv.innerText = content;
+      chatHistory.appendChild(msgDiv);
+      chatHistory.scrollTop = chatHistory.scrollHeight;
+    }
+
+    chatForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const message = userInput.value;
+      addMessage(message, "user");
+      userInput.value = "";
+      const reply = await sendMessageToAPI(message);
+      addMessage(reply || "(no reply)", "ai");
+    });
+  </script>
+</body>
+</html>
